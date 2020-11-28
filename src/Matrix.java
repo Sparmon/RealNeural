@@ -64,7 +64,11 @@ public class Matrix {
     }
 
     /*element-wise*/public void multiply(Matrix a){
-
+        for(int i = 0; i <rows; i++){
+            for(int j = 0; j < cols; j++){
+                data[i][j]*= a.data[i][j];
+            }
+        }
     }
 
     /*scalar multiplication*/public void multiply(double a) {
@@ -73,6 +77,43 @@ public class Matrix {
                 data[i][j]*=a;
             }
         }
+    }
+
+    public void sigmoid(){
+        for(int i = 0; i < rows; i++){
+            for(int j = 0;j< cols; j++){
+                data[i][j] = 1/(1+Math.exp(-1*data[i][j]));
+            }
+        }
+    }
+
+    public Matrix dsigmoid(){
+        Matrix poop = new Matrix(rows,cols);
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < rows; j++){
+                poop.data[i][j] = data[i][j] * (1-data[i][j]);
+            }
+        }
+        return poop;
+    }
+
+    public static Matrix fromArray(double[] inp){
+        Matrix temp = new Matrix(inp.length, 1);
+        for(int i = 0; i < inp.length; i++){
+            temp.data[i][0] = inp[i];
+        }
+        return temp;
+    }
+
+    public List<Double> toArray(){
+        //consider making this into array later for ease
+        List<Double> ret = new ArrayList<Double>();
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < cols; j++){
+                ret.add(data[i][j]);
+            }
+        }
+        return ret;
     }
 
     public void print(){

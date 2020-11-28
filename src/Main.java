@@ -3,6 +3,5 @@ public class Main {
     public static void main(String[] args){
         Matrix test = new Matrix(5,5);
         test.print();
-        System.out.println("see if this works");
     }
 }
