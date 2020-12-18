@@ -7,33 +7,49 @@ public class Meta {
         out = y;
         outNum = 1;
         hid = hidden;
-        n1 = new NeuralNetwork(inpNum, hid, outNum);
-        n2 = new NeuralNetwork(inpNum, hid, outNum);
-        n3 = new NeuralNetwork(inpNum, hid, outNum);
-        n4 = new NeuralNetwork(inpNum, hid, outNum);
-        n5 = new NeuralNetwork(inpNum, hid, outNum);
-        n6 = new NeuralNetwork(inpNum, hid, outNum);
-        n7 = new NeuralNetwork(inpNum, hid, outNum);
-        n8 = new NeuralNetwork(inpNum, hid, outNum);
-        n9 = new NeuralNetwork(inpNum, hid, outNum);
-        n10 = new NeuralNetwork(inpNum, hid, outNum);
-        //testing that standev works (it does)
-        System.out.println("ex 1:");
-        System.out.println(n1.predict(inp[0]));
-        System.out.println("ex 2:");
-        System.out.println(n1.predict(inp[1]));
-        System.out.println("ex 3:");
-        System.out.println(n1.predict(inp[2]));
-        System.out.println("ex 4:");
-        System.out.println(n1.predict(inp[3]));
-        System.out.println("standev");
-        System.out.println(standev(n1));
-
+        nn = new NeuralNetwork[10];
+        for(int i = 0; i < nn.length; i++){
+            nn[i] = new NeuralNetwork(inpNum, hid, 1);
+        }
     }
 
     public NeuralNetwork calc(int time){
-        //for loop
-        //says how many times to go through and returns best at end
+        for(int i = 0; i < time; i++){
+            newMeta();
+        }
+        System.out.println(standev(best()));
+        return best();
+    }
+
+    public void newMeta(){
+        NeuralNetwork best = best();
+        NeuralNetwork sec = secBest();
+        NeuralNetwork worst = worst();
+        nn[0] = best;
+        nn[1] = sec;
+        opp(worst.weights_ho);
+        opp(worst.weights_ih);
+        opp(worst.bias_h);
+        opp(worst.bias_o);
+        nn[2] = worst;
+        //need functions for 3 to 7
+        nn[3] = new NeuralNetwork(inpNum, hid, 1);
+        nn[4] = new NeuralNetwork(inpNum, hid, 1);
+        nn[5] = new NeuralNetwork(inpNum, hid, 1);
+        nn[6] = new NeuralNetwork(inpNum, hid, 1);
+        nn[7] = new NeuralNetwork(inpNum, hid, 1);
+        //those 5 are temporary
+
+        nn[8] = new NeuralNetwork(inpNum, hid, 1);
+        nn[9] = new NeuralNetwork(inpNum, hid, 1);
+    }
+
+    public void opp(Matrix m){
+        for(int i = 0; i < m.rows; i++){
+            for(int j = 0; j < m.cols; j++){
+                m.data[i][j] = -1 * m.data[i][j];
+            }
+        }
     }
 
     public double standev(NeuralNetwork poop){
@@ -47,12 +63,58 @@ public class Meta {
         return (sum/inp.length);
     }
 
-    public void setStanDevArray(){
-
+    public NeuralNetwork best(){
+        double rec = standev(nn[0]);
+        int ret = 0;
+        for(int i = 1; i < nn.length; i++){
+            if(standev(nn[i])<rec){
+                rec = standev(nn[i]);
+                ret = i;
+            }
+        }
+        return nn[ret];
     }
 
-    public NeuralNetwork best(){
+    public NeuralNetwork secBest(){
+        double best;
+        double sec;
+        int ret;
+        int realRet;
+        if(standev(nn[0])> standev(nn[1])){
+            best = standev(nn[1]);
+            sec = standev(nn[0]);
+            ret = 1;
+            realRet = 0;
+        }else{
+            best = standev(nn[0]);
+            sec = standev(nn[1]);
+            realRet = 1;
+            ret = 0;
+        }
+        for(int i = 2; i < nn.length; i++){
+            if(standev(nn[i])< best){
+                sec = best;
+                realRet = ret;
+                best = standev(nn[i]);
+                ret = i;
+            }else if(standev(nn[i])<sec){
+                realRet = i;
+                sec = standev(nn[i]);
+            }
+        }
+        return nn[realRet];
+    }
 
+    public NeuralNetwork worst(){
+        double rec = standev(nn[0]);
+        int ret = 0;
+        for(int i = 1; i < nn.length; i++){
+            if(standev(nn[i])>rec){
+                rec = standev(nn[i]);
+                ret = i;
+            }
+        }
+        return nn[ret];
     }
 
     double[][] inp;
@@ -60,15 +122,5 @@ public class Meta {
     double[] out;
     int outNum;
     int hid;
-    private NeuralNetwork n1;
-    private NeuralNetwork n2;
-    private NeuralNetwork n3;
-    private NeuralNetwork n4;
-    private NeuralNetwork n5;
-    private NeuralNetwork n6;
-    private NeuralNetwork n7;
-    private NeuralNetwork n8;
-    private NeuralNetwork n9;
-    private NeuralNetwork n10;
-    private double[] standevs;
+    private NeuralNetwork[] nn;
 }

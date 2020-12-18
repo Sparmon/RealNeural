@@ -10,6 +10,10 @@ public class Main {
 
     public static void main(String[] args) {
         Meta tester = new Meta(X, Y, 3);
+        NeuralNetwork res = tester.calc(10000);
+        for(int i = 0; i < X.length; i++){
+            System.out.println(res.predict(X[i]));
+        }
 
 
 
