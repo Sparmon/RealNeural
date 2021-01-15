@@ -1,6 +1,7 @@
 import torch
 from numpy import exp, array, random, dot
 import pandas as pd
+import os
 
 class NeuralNetwork():
     def __init__(self):
@@ -11,7 +12,7 @@ class NeuralNetwork():
         # We model a single neuron, with 3 input connections and 1 output connection.
         # We assign random weights to a 3 x 1 matrix, with values in the range -1 to 1
         # and mean 0.
-        self.synaptic_weights = pd.read_csv('/Users/ethan/Desktop/Code with spencer /weights.csv').values
+        self.synaptic_weights = pd.read_csv(os.getcwd() + '/src/weights.csv').values
         print("weights"),
         print(self.synaptic_weights)
 
@@ -53,7 +54,7 @@ class NeuralNetwork():
 
 
 if __name__ == "__main__":
-
+    print(os.getcwd())
     #Intialise a single neuron neural network.
     neural_network = NeuralNetwork()
 
@@ -71,7 +72,7 @@ if __name__ == "__main__":
 
     print ("New synaptic weights after training: ")
     print (neural_network.synaptic_weights)
-    pd.DataFrame(neural_network.synaptic_weights).to_csv("/Users/ethan/Desktop/Code with spencer /weights.csv", index = 0)
+    pd.DataFrame(neural_network.synaptic_weights).to_csv(os.getcwd() + '/src/weights.csv', index = 0)
     # Test the neural network with a new situation.
     print ("Considering new situation [1, 0, 0] -> ?: ")
     print (neural_network.think(array([1, 0, 0])))
