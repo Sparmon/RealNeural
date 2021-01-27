@@ -18,6 +18,20 @@ class Matrix {
         }
     }
 
+    //blank
+    public Matrix(int rows, int cols, int zero){
+        data= new double[rows][cols];
+        this.rows=rows;
+        this.cols=cols;
+        for(int i=0;i<rows;i++)
+        {
+            for(int j=0;j<cols;j++)
+            {
+                data[i][j]=0;
+            }
+        }
+    }
+
     public void print()
     {
         for(int i=0;i<rows;i++)
@@ -153,6 +167,7 @@ class Matrix {
     }
 
     public Matrix dsigmoid() {
+        sigmoid();
         Matrix poop=new Matrix(rows,cols);
         for(int i=0;i<rows;i++)
         {

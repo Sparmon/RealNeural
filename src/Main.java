@@ -9,11 +9,9 @@ public class Main {
     static double[] Y= {0,1,1,0};
 
     public static void main(String[] args) {
-        Meta tester = new Meta(X, Y, 3);
-        NeuralNetwork res = tester.calc(100000);
-        for(int i = 0; i < X.length; i++){
-            System.out.println(res.predict(X[i]));
-        }
+        Trainer test = new Trainer(X,Y,1,0.1);
+        NeuralNetwork poop = new NeuralNetwork(2,3,1);
+        test.train(poop);
 
 
 
