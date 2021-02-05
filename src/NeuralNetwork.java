@@ -28,6 +28,13 @@ public class NeuralNetwork {
         return meh.get(0);
     }
 
+    public Matrix zLm1(double[] x){
+        Matrix input = Matrix.fromArray(x);
+        Matrix hidden = Matrix.multiply(weights_ih, input);
+        hidden.add(bias_h);
+        return hidden;
+    }
+
     public Matrix aLm1(double[] x){
         Matrix input = Matrix.fromArray(x);
         Matrix hidden = Matrix.multiply(weights_ih, input);
@@ -46,6 +53,10 @@ public class NeuralNetwork {
         output.add(bias_o);
         return output;
     }
+
+
+
+
 
 //    public void train(double[] X, double[] Y){
 //        Matrix input = Matrix.fromArray(X);
