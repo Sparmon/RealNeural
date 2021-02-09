@@ -14,17 +14,14 @@ public class Trainer {
 
     public void train(NeuralNetwork poop){
         for(int i = 0; i < time; i++) {
+            //THESE DON'T WORK BECAUSE I SOMETIMES DIVIDE BY 0!!!!
             Matrix bias_oGrad = bias_oGradCalc(poop);
-            bias_oGrad.multiply(lrate);
 
             Matrix weights_hoGrad = weights_hoGradCalc(poop);
-            weights_hoGrad.multiply(lrate);
 
             Matrix bias_hGrad = bias_hGradCalc(poop);
-            bias_hGrad.multiply(lrate);
 
             Matrix weights_ihGrad = weights_ihGradCalc(poop);
-            weights_ihGrad.multiply(lrate);
 
             poop.bias_o.add(bias_oGrad);
             System.out.println("1");
@@ -35,9 +32,9 @@ public class Trainer {
             poop.bias_h.add(bias_hGrad);
             System.out.println("3");
             bias_hGrad.print();
-//            poop.weights_ih.add(weights_ihGrad);
-//            System.out.println("4");
-//            weights_ihGrad.print();
+            poop.weights_ih.add(weights_ihGrad);
+            System.out.println("4");
+            weights_ihGrad.print();
             System.out.println("5");
             System.out.println(poop.predict(inp[0])+" " + poop.predict(inp[1])+" " +poop.predict(inp[2])+" " +poop.predict(inp[3]));
         }
@@ -52,9 +49,9 @@ public class Trainer {
             Matrix dsig = poop.zLm1(inp[i]).dsigmoid();
             Matrix ret = Matrix.multiply(dsig, inpu);
             Matrix temp = hiddenGradCalc(poop);
+            temp.multiply(lrate);
             for(int j = 0; j < ret.rows; j++){
                 for(int k = 0; k < ret.cols; k++){
-
                         ret.data[j][k] = temp.data[j][0] / ret.data[j][k];
 
                 }
@@ -68,6 +65,7 @@ public class Trainer {
         Matrix[] listy = new Matrix[4];
         for(int i = 0; i < 4; i++){
             Matrix dsig = poop.zLm1(inp[i]).dsigmoid();
+            dsig.multiply(lrate);
             for(int j = 0; j < dsig.rows; j++){
                 for(int k = 0; k < dsig.cols; k++){
                         dsig.data[j][k] = hiddenGradCalc(poop).data[j][k] / dsig.data[j][k];
@@ -101,6 +99,7 @@ public class Trainer {
             Matrix dsig = poop.zL(inp[i]).dsigmoid();
             Matrix ret = Matrix.multiply(dsig, alm1);
             double temp = out[i] - poop.predict(inp[i]);
+            temp*=lrate;
             for(int j = 0; j < ret.rows; j++){
                 for(int k = 0; k < ret.cols; k++){
                     ret.data[j][k] = temp/ret.data[j][k];
@@ -115,7 +114,7 @@ public class Trainer {
         Matrix[] listy = new Matrix[4];
         for(int i = 0; i < 4; i++){
             Matrix dsig = poop.zL(inp[i]).dsigmoid();
-            dsig.data[0][0] = (out[i] - poop.predict(inp[i]))/dsig.data[0][0];
+            dsig.data[0][0] = ((out[i] - poop.predict(inp[i]))*lrate)/dsig.data[0][0];
             listy[i] = dsig;
         }
         return (avgMatrix(listy));
