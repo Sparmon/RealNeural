@@ -1,23 +1,24 @@
 # Import required libraries :
 import numpy as np# Define input features :
 input_features = np.array([[0,0],[0,1],[1,0],[1,1]])
-print (input_features.shape)
-print (input_features)# Define target output :
+# Define target output :
 target_output = np.array([[0,1,1,0]])# Reshaping our target output into vector :
 target_output = target_output.reshape(4,1)
-print(target_output.shape)
-print (target_output)# Define weights :
+# Define weights :
 # 8 for hidden layer
 # 4 for output layer
 # 12 total 
 weight_hidden = np.random.rand(2,4)
-weight_output = np.random.rand(4,1)# Learning Rate :
+weight_output = np.random.rand(4,1)
+print(weight_hidden)
+print(weight_output)# Learning Rate :
 lr = 0.05# Sigmoid function :
 def sigmoid(x):
  return 1/(1+np.exp(-x))# Derivative of sigmoid function :
 def sigmoid_der(x):
  return sigmoid(x)*(1-sigmoid(x))# Main logic :
-for epoch in range(20000):
+
+for epoch in range(200000):
  # Input for hidden layer :
  input_hidden = np.dot(input_features, weight_hidden)
  
@@ -55,9 +56,9 @@ for epoch in range(20000):
  weight_output -= lr * derror_dwo
  
  
-# Final values of weight in hidden layer :
-print (weight_hidden)# Final values of weight in output layer :
-print (weight_output)#Taking inputs :
+"""# Final values of weight in hidden layer :
+# Final values of weight in output layer :
+#Taking inputs :
 single_point = np.array([0,-1])
 #1st step :
 result1 = np.dot(single_point, weight_hidden) 
@@ -77,7 +78,7 @@ result2 = sigmoid(result1)
 result3 = np.dot(result2,weight_output)
 #4th step :
 result4 = sigmoid(result3)
-print(result4)#Taking inputs :
+#Taking inputs :
 single_point = np.array([1,1.2])
 #1st step :
 result1 = np.dot(single_point, weight_hidden) 
@@ -86,5 +87,19 @@ result2 = sigmoid(result1)
 #3rd step :
 result3 = np.dot(result2,weight_output)
 #4th step :
-result4 = sigmoid(result3)
-print(result4)
+result4 = sigmoid(result3)"""
+
+
+print(weight_hidden)
+print(weight_output)
+input_hidden = np.dot(input_features, weight_hidden)
+
+# Output from hidden layer :
+output_hidden = sigmoid(input_hidden)
+
+# Input for output layer :
+input_op = np.dot(output_hidden, weight_output)
+
+# Output from output layer :
+output_op = sigmoid(input_op)
+print(output_op)
